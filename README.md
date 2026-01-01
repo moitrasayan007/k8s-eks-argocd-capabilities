@@ -85,8 +85,8 @@ syncPolicy:
 
 ### Target Cluster
 - **Cluster**: `prod-cluster-local`
-- **EKS ARN**: `arn:aws:eks:us-west-1:501294308535:cluster/prod-eks`
-- **Region**: us-west-1
+- **EKS ARN**: `arn:aws:eks:us-west-1:<account_id>:cluster/<cluster_name>`
+- **Region**: `<region>`
 
 ## AWS EKS Managed ArgoCD
 
