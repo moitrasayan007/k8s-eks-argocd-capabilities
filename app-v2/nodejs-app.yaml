@@ -10,7 +10,7 @@ spec:
     targetRevision: master
     path: app-v2
   destination:
-    name: local-cluster
+    name: prod-cluster-local
     namespace: sample-app-v2
   syncPolicy:
     automated:
