@@ -10,7 +10,7 @@ spec:
     targetRevision: master
     path: k8s
   destination:
-    server: https://kubernetes.default.svc
+    name: prod-eks
     namespace: sample-app
   syncPolicy:
     automated:
