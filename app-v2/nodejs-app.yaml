@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-app-v2
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities.git
+    targetRevision: master
+    path: app-v2
+  destination:
+    name: local-cluster
+    namespace: sample-app-v2
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
