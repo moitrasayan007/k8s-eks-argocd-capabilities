@@ -10,7 +10,7 @@ spec:
     targetRevision: master
     path: k8s
   destination:
-    name: prod-eks
+    name: local-cluster
     namespace: sample-app
   syncPolicy:
     automated:
