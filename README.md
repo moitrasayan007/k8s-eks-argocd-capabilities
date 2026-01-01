@@ -1,6 +1,6 @@
 # k8s-eks-argocd-capabilities
 
-A demonstration project showcasing GitOps capabilities using ArgoCD with Amazon EKS (Elastic Kubernetes Service). This project implements continuous deployment workflows for Kubernetes applications using ArgoCD's automated synchronization features.
+A demonstration project showcasing GitOps capabilities using AWS managed ArgoCD with Amazon EKS. This project leverages the new EKS capabilities for workload orchestration and cloud resource management, implementing continuous deployment workflows with fully managed ArgoCD.
 
 ## Architecture Overview
 
@@ -88,12 +88,21 @@ syncPolicy:
 - **EKS ARN**: `arn:aws:eks:us-west-1:501294308535:cluster/prod-eks`
 - **Region**: us-west-1
 
+## AWS EKS Managed ArgoCD
+
+This project uses AWS managed ArgoCD as part of the new EKS capabilities announced in 2024. The managed service provides:
+
+- **Fully Managed**: AWS handles ArgoCD installation, updates, and maintenance
+- **Integrated Security**: Native IAM integration and AWS security best practices
+- **High Availability**: Multi-AZ deployment with automatic failover
+- **Monitoring**: Built-in CloudWatch integration for observability
+
 ## Getting Started
 
 1. **Prerequisites**
-   - Amazon EKS cluster running
-   - ArgoCD installed on the cluster
+   - Amazon EKS cluster with managed ArgoCD enabled
    - kubectl configured for cluster access
+   - AWS CLI configured with appropriate permissions
 
 2. **Deploy ArgoCD Applications**
    ```bash
