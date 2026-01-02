@@ -11,12 +11,12 @@ A demonstration project showcasing GitOps capabilities using AWS managed ArgoCD 
 │                                 GitOps Workflow                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 
-┌──────────────────┐    ┌──────────────────┐    ┌──────────────────────────────────┐
-│   Developer      │    │   Git Repository │    │   EKS Capabilities (ArgoCD)      │
-│                  │    │                  │    │                                  │
-│  1. Code Changes │───▶│  2. Push to      │───▶│  3. Detects Changes              │
-│     & Commit     │    │     GitHub       │    │     & Syncs Applications         │
-└──────────────────┘    └──────────────────┘    └──────────────────────────────────┘
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────────────────┐
+│   Developer      │    │   Git Repository │    │   EKS Capabilities (ArgoCD)  │
+│                  │    │                  │    │                              │
+│  1. Code Changes │───▶│  2. Push to      │───▶│  3. Detects Changes          │
+│     & Commit     │    │     GitHub       │    │     & Syncs Applications     │
+└──────────────────┘    └──────────────────┘    └──────────────────────────────┘
                                                                     │
                                                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
