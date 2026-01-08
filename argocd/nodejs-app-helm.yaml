@@ -14,7 +14,7 @@ spec:
       - values.yaml
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
-    namespace: sample-app
+    namespace: sample-app-helm
   syncPolicy:
     automated:
       prune: true

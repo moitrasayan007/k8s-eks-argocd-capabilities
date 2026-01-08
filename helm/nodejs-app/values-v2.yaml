@@ -14,7 +14,7 @@ service:
 
 namespace:
   create: true
-  name: sample-app-v2
+  name: sample-app-v2-helm
 
 resources: {}
 

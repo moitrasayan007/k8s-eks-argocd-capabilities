@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-username/k8s-eks-argocd-capabilities
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
     targetRevision: HEAD
     path: helm/nodejs-app
     helm:
@@ -14,7 +14,7 @@ spec:
       - values-v2.yaml
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
-    namespace: sample-app-v2
+    namespace: sample-app-v2-helm
   syncPolicy:
     automated:
       prune: true
