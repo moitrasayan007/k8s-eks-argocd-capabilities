@@ -8,7 +8,7 @@ spec:
 
   source:
     repoURL: oci://501294308535.dkr.ecr.us-west-1.amazonaws.com
-    chart: helm/nodejs-app
+    chart: nodejs-app
     targetRevision: 0.1.0
     helm:
       values: |
