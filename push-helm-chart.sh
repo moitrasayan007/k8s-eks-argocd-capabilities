@@ -13,6 +13,9 @@ aws ecr create-repository --repository-name ${CHART_NAME} --region ${AWS_REGION}
 # Login to ECR
 aws ecr get-login-password --region ${AWS_REGION} | helm registry login --username AWS --password-stdin ${ECR_REGISTRY}
 
+# Copy values file to chart directory
+cp values-ecr.yaml helm/${CHART_NAME}/
+
 # Package the chart
 helm package helm/${CHART_NAME}
 

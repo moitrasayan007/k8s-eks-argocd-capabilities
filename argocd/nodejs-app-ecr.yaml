@@ -12,14 +12,8 @@ spec:
     #enableOCI: true
     chart: nodejs-app
     helm:
-      values: |
-        replicaCount: 2
-        image:
-          repository: nginx
-          tag: "latest"
-        service:
-          type: ClusterIP
-          port: 80
+      valueFiles:
+      - values-ecr.yaml
 
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
