@@ -7,8 +7,8 @@ spec:
   project: default
 
   source:
-    repoURL: oci://501294308535.dkr.ecr.us-west-1.amazonaws.com/helm
-    chart: nodejs-app
+    repoURL: oci://501294308535.dkr.ecr.us-west-1.amazonaws.com
+    chart: helm/nodejs-app
     targetRevision: 0.1.0
     helm:
       values: |
@@ -16,9 +16,6 @@ spec:
         image:
           repository: nginx
           tag: "latest"
-        namespace:
-          create: true
-          name: sample-app-ecr
         service:
           type: ClusterIP
           port: 80
