@@ -4,7 +4,7 @@ metadata:
   name: nodejs-app-v2
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
