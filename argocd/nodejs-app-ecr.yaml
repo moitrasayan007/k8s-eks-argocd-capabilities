@@ -7,9 +7,10 @@ spec:
   project: default
 
   source:
-    repoURL: oci://501294308535.dkr.ecr.us-west-1.amazonaws.com
-    chart: nodejs-app
+    repoURL: 501294308535.dkr.ecr.us-west-1.amazonaws.com
     targetRevision: 0.1.0
+    #enableOCI: true
+    chart: nodejs-app
     helm:
       values: |
         replicaCount: 2
