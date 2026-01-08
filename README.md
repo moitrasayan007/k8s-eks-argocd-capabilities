@@ -43,12 +43,14 @@ A demonstration project showcasing GitOps capabilities using AWS managed ArgoCD 
 ```
 k8s-eks-argocd-capabilities/
 ├── app-v1/                     # Version 1 application manifests
-│   ├── deployment.yaml         # Kubernetes deployment and service
-│   └── nodejs-app.yaml         # ArgoCD application definition
+│   └── deployment.yaml         # Kubernetes deployment and service
 ├── app-v2/                     # Version 2 application manifests
-│   ├── deployment.yaml         # Kubernetes deployment and service
-│   └── nodejs-app.yaml         # ArgoCD application definition
-├── argo-secret.yaml            # EKS cluster connection secret
+│   └── deployment.yaml         # Kubernetes deployment and service
+├── argocd/                     # ArgoCD application definitions
+│   ├── nodejs-app.yaml         # ArgoCD application for v1
+│   └── nodejs-app-v2.yaml      # ArgoCD application for v2
+├── argo-remote.yaml            # Remote EKS cluster connection secret
+├── argo-secret.yaml            # Local EKS cluster connection secret
 ├── argocd.jpg                  # Architecture diagram
 └── README.md                   # Project documentation
 ```
