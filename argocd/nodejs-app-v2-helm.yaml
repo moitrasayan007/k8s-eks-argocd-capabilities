@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-app-v2-helm
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-username/k8s-eks-argocd-capabilities
+    targetRevision: HEAD
+    path: helm/nodejs-app
+    helm:
+      valueFiles:
+      - values-v2.yaml
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
+    namespace: sample-app-v2
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

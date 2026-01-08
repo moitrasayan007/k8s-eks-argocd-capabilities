@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+namespace:
+  create: true
+  name: sample-app
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

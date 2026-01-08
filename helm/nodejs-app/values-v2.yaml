@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: "nodejs-app-v2"
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+namespace:
+  create: true
+  name: sample-app-v2
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
