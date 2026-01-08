@@ -10,7 +10,7 @@ spec:
     targetRevision: master
     path: app-v1
   destination:
-    name: remote-cluster
+    name: prod-eks
     namespace: sample-app
   syncPolicy:
     automated:
