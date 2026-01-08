@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-username/k8s-eks-argocd-capabilities
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
     targetRevision: master
     path: helm/nodejs-app
     helm:
