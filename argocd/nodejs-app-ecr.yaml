@@ -5,6 +5,7 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: oci://501294308535.dkr.ecr.us-west-1.amazonaws.com/helm
     chart: nodejs-app
@@ -21,13 +22,15 @@ spec:
         service:
           type: ClusterIP
           port: 80
+
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
     namespace: sample-app-ecr
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
+      - CreateNamespace=true
+      - ServerSideApply=true
