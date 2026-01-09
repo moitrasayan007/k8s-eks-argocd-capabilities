@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
-    targetRevision: HEAD
+    targetRevision: master
     path: helm/nodejs-app
     helm:
       valueFiles:

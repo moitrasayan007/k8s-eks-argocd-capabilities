@@ -4,7 +4,7 @@ metadata:
   name: nodejs-app-ecr
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
 
@@ -17,7 +17,7 @@ spec:
       - values-ecr.yaml
 
   destination:
-    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
     namespace: sample-app-ecr
 
   syncPolicy:
