@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-rollout-app
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: rollout
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
+    namespace: sample-app-rollout
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

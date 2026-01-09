@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nodejs-rollout
+  namespace: sample-app-rollout
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+  selector:
+    matchLabels:
+      app: nodejs-rollout
+  template:
+    metadata:
+      labels:
+        app: nodejs-rollout
+    spec:
+      containers:
+      - name: nodejs-app
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-rollout-service
+  namespace: sample-app-rollout
+spec:
+  selector:
+    app: nodejs-rollout
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
