@@ -1,4 +1,4 @@
-setProductionState: false
+setProductionState: true
 canaryStage: "deploy"  # deploy, promote-canary, promote-live
 
 app:
