@@ -16,7 +16,7 @@ if [ "$PRODUCTION_STATE" = "true" ]; then
             cp canary/deploy.yaml canary-active.yaml
             
             # Auto-progress to next stage
-            sed -i '' 's/canaryStage: "deploy"/canaryStage: "promote-canary"/' values.yaml
+            python3 -c "import re; content=open('values.yaml').read(); open('values.yaml','w').write(re.sub(r'canaryStage: \"deploy\"', 'canaryStage: \"promote-canary\"', content))"
             
             git add canary-active.yaml values.yaml
             git commit -m "Auto-Deploy: PRODUCTION_STATE=test, next: promote-canary"
@@ -30,7 +30,7 @@ if [ "$PRODUCTION_STATE" = "true" ]; then
             cp canary/promote-canary.yaml canary-active.yaml
             
             # Auto-progress to next stage
-            sed -i '' 's/canaryStage: "promote-canary"/canaryStage: "promote-live"/' values.yaml
+            python3 -c "import re; content=open('values.yaml').read(); open('values.yaml','w').write(re.sub(r'canaryStage: \"promote-canary\"', 'canaryStage: \"promote-live\"', content))"
             
             git add canary-active.yaml values.yaml
             git commit -m "Auto-Promote Canary: PRODUCTION_STATE=live, next: promote-live"
@@ -44,8 +44,7 @@ if [ "$PRODUCTION_STATE" = "true" ]; then
             cp canary/promote-live.yaml canary-active.yaml
             
             # Reset to normal state
-            sed -i '' 's/setProductionState: true/setProductionState: false/' values.yaml
-            sed -i '' 's/canaryStage: "promote-live"/canaryStage: "deploy"/' values.yaml
+            python3 -c "import re; content=open('values.yaml').read(); content=re.sub(r'setProductionState: true', 'setProductionState: false', content); content=re.sub(r'canaryStage: \"promote-live\"', 'canaryStage: \"deploy\"', content); open('values.yaml','w').write(content)"
             
             git add canary-active.yaml values.yaml
             git commit -m "Auto-Promote Live: Canary completed, reset to normal"
