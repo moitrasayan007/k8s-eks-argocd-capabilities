@@ -1,0 +1,10 @@
+setProductionState: false
+canaryStage: "deploy"  # deploy, promote-canary, promote-live
+
+app:
+  name: nodejs-app
+  image:
+    repository: nginx
+    tag: "1.23"
+  replicas: 3
+  namespace: nodejs-canary

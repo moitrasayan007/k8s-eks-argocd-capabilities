@@ -8,6 +8,8 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
+setProductionState: false
+
 service:
   type: ClusterIP
   port: 80
@@ -16,7 +18,13 @@ namespace:
   create: true
   name: sample-app-helm
 
-resources: {}
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
 
 nodeSelector: {}
 

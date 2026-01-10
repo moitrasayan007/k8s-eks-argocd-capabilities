@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nodejs-canary
+
+resources:
+- ../../base
+
+namePrefix: live-
+
+commonLabels:
+  stage: promote-live
+  version: stable
+
+patchesStrategicMerge:
+- replica-patch.yaml

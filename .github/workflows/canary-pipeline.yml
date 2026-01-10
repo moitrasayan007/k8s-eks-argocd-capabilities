@@ -1,0 +1,38 @@
+name: Automated Canary Pipeline
+
+on:
+  push:
+    paths:
+      - 'values.yaml'
+      - 'canary-active.yaml'
+  workflow_dispatch:
+
+jobs:
+  canary-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Configure Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+    - name: Run Canary Pipeline
+      run: |
+        chmod +x auto-canary-pipeline.sh
+        ./auto-canary-pipeline.sh
+        
+    - name: Wait and check for next stage
+      run: |
+        sleep 30
+        # Check if there are more stages to process
+        PRODUCTION_STATE=$(grep "setProductionState:" values.yaml | awk '{print $2}')
+        if [ "$PRODUCTION_STATE" = "true" ]; then
+          echo "More stages to process, triggering next run"
+          ./auto-canary-pipeline.sh
+        fi

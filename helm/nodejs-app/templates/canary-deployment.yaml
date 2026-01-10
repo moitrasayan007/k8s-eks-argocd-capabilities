@@ -1,0 +1,135 @@
+{{- if .Values.setProductionState }}
+# Deploy Stage - PRODUCTION_STATE=test
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nodejs-app.fullname" . }}-deploy
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: {{ include "nodejs-app.name" . }}
+    stage: deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "nodejs-app.name" . }}
+      stage: deploy
+  template:
+    metadata:
+      labels:
+        app: {{ include "nodejs-app.name" . }}
+        stage: deploy
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: PRODUCTION_STATE
+          value: "test"
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+---
+# Promote Canary Stage - PRODUCTION_STATE=live
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nodejs-app.fullname" . }}-canary
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: {{ include "nodejs-app.name" . }}
+    stage: promote-canary
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "nodejs-app.name" . }}
+      stage: promote-canary
+  template:
+    metadata:
+      labels:
+        app: {{ include "nodejs-app.name" . }}
+        stage: promote-canary
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: PRODUCTION_STATE
+          value: "live"
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+---
+# Promote Live Stage - Full production
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nodejs-app.fullname" . }}-live
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: {{ include "nodejs-app.name" . }}
+    stage: promote-live
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "nodejs-app.name" . }}
+      stage: promote-live
+  template:
+    metadata:
+      labels:
+        app: {{ include "nodejs-app.name" . }}
+        stage: promote-live
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: PRODUCTION_STATE
+          value: "live"
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+{{- else }}
+# Normal deployment when setProductionState is false
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nodejs-app.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: {{ include "nodejs-app.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "nodejs-app.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "nodejs-app.name" . }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+{{- end }}

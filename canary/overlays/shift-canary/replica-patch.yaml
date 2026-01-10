@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: nodejs-app
+        env:
+        - name: PRODUCTION_STATE
+          value: "live"

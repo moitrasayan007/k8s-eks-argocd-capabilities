@@ -1,0 +1,83 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-canary-deploy
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: canary/overlays/deploy
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    namespace: nodejs-canary
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-canary-promote-canary
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: canary/overlays/promote-canary
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    namespace: nodejs-canary
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-canary-shift-canary
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: canary/overlays/shift-canary
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    namespace: nodejs-canary
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-canary-promote-live
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: canary/overlays/promote-live
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    namespace: nodejs-canary
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
