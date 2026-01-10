@@ -18,7 +18,7 @@ spec:
       - pause: {duration: 10}
   selector:
     matchLabels:
-      app: nodejs-rollout
+      app: "nodejs-rollout"
   template:
     metadata:
       labels:

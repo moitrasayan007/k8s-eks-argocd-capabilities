@@ -10,7 +10,7 @@ spec:
 
   source:
     repoURL: 501294308535.dkr.ecr.us-west-1.amazonaws.com/helm
-    targetRevision: 0.1.0
+    targetRevision: 1.2.0
     chart: nodejs-app
     helm:
       valueFiles:

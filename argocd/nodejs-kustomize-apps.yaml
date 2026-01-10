@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-kustomize-staging
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: kustomize/overlays/staging
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/staging-eks
+    namespace: nodejs-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-kustomize-prod
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    targetRevision: master
+    path: kustomize/overlays/prod
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
+    namespace: nodejs-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
