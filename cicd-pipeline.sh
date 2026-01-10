@@ -13,10 +13,14 @@ ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
 echo "🚀 Starting CI/CD Pipeline for version: ${NEW_VERSION}"
 
-# Step 1: Update Helm Chart version
-echo "📦 Updating Helm Chart version to ${NEW_VERSION}"
+# Step 1: Update Helm Chart version and image
+echo "📦 Updating Helm Chart version to ${NEW_VERSION} and image to ${IMAGE_TAG}"
 sed -i '' "s/version: .*/version: ${NEW_VERSION}/" helm/${CHART_NAME}/Chart.yaml
 sed -i '' "s/appVersion: .*/appVersion: \"${NEW_VERSION}\"/" helm/${CHART_NAME}/Chart.yaml
+
+# Update image in Helm values
+sed -i '' "s/tag: .*/tag: \"${IMAGE_TAG#*:}\"/" helm/${CHART_NAME}/values.yaml
+sed -i '' "s/repository: .*/repository: \"${IMAGE_TAG%:*}\"/" helm/${CHART_NAME}/values.yaml
 
 # Step 2: Push Helm Chart to ECR
 echo "🏗️ Building and pushing Helm chart to ECR"
