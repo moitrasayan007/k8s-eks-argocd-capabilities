@@ -1,5 +1,5 @@
 setProductionState: true
-canaryStage: "promote-canary"
+canaryStage: "promote-live"
 
 app:
   name: nodejs-app
