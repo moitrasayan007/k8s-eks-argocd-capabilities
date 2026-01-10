@@ -16,4 +16,5 @@ commonLabels:
 
 images:
 - name: nginx
-  newTag: nginx:1.22
+  newName: nginx
+  newTag: "1.22"

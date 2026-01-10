@@ -4,7 +4,7 @@ metadata:
   name: nodejs-kustomize-staging
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
@@ -28,7 +28,7 @@ metadata:
   name: nodejs-kustomize-prod
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:

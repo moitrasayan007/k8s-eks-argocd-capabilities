@@ -27,9 +27,9 @@ helm push ${CHART_NAME}-${NEW_VERSION}.tgz oci://${ECR_REGISTRY}/helm
 # Step 3: Update Kustomize image tags
 echo "🔄 Updating Kustomize image tags"
 cd kustomize/base
-kustomize edit set image nginx:${IMAGE_TAG}
+kustomize edit set image nginx=${IMAGE_TAG}
 cd ../overlays/prod
-kustomize edit set image nginx:${IMAGE_TAG}
+kustomize edit set image nginx=${IMAGE_TAG}
 cd ../../..
 
 # Step 4: Update ArgoCD Application targetRevision
