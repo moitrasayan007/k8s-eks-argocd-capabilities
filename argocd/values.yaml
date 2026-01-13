@@ -1,6 +1,6 @@
 app:
   name: blue-green-app
-  image: nginx:1.23
+  image: nginx:1.24
   replicas: 3
 
 deployment:
