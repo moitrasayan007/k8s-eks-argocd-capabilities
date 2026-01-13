@@ -32,6 +32,30 @@ spec:
               serviceAccountName: argo-rollouts
 ---
 apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: promote-live-analysis
+  namespace: {{ .Release.Namespace }}
+spec:
+  metrics:
+  - name: auto-promote
+    count: 1
+    interval: 5s
+    successCondition: "true"
+    provider:
+      job:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: auto-promote
+                image: bitnami/kubectl:latest
+                command: ["/bin/sh"]
+                args: ["-c", "kubectl argo rollouts promote {{ .Values.app.name }} -n {{ .Release.Namespace }} && echo 'Step 3: promote_live - Auto promoted to live'"]
+              restartPolicy: Never
+              serviceAccountName: argo-rollouts
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: {{ .Values.app.name }}
@@ -66,11 +90,14 @@ spec:
     blueGreen:
       activeService: {{ .Values.services.active }}
       previewService: {{ .Values.services.preview }}
-      autoPromotionEnabled: true
+      autoPromotionEnabled: false
       scaleDownDelaySeconds: 30
       prePromotionAnalysis:
         templates:
         - templateName: promote-canary-analysis
+      postPromotionAnalysis:
+        templates:
+        - templateName: promote-live-analysis
 
 ---
 apiVersion: v1
