@@ -20,5 +20,5 @@ services:
   port: 80
 
 rollout:
-  autoPromotionEnabled: true
+  autoPromotionEnabled: false
   scaleDownDelaySeconds: 30

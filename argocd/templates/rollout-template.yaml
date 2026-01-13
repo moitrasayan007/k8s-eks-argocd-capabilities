@@ -1,4 +1,12 @@
 {{- if .Values.deployment.setProductionState }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.name }}-config
+  namespace: {{ .Release.Namespace }}
+data:
+  PRODUCTION_STATE: "test"
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -20,9 +28,9 @@ spec:
           ports:
             - containerPort: {{ .Values.services.port }}
               protocol: TCP
-          env:
-            - name: PRODUCTION_STATE
-              value: "test"
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.app.name }}-config
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu | quote }}
@@ -34,8 +42,61 @@ spec:
     blueGreen:
       activeService: {{ .Values.services.active }}
       previewService: {{ .Values.services.preview }}
-      autoPromotionEnabled: {{ .Values.rollout.autoPromotionEnabled }}
-      scaleDownDelaySeconds: {{ .Values.rollout.scaleDownDelaySeconds }}
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 30
+      prePromotionAnalysis:
+        templates:
+        - templateName: promote-canary-analysis
+      postPromotionAnalysis:
+        templates:
+        - templateName: promote-live-analysis
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: promote-canary-analysis
+  namespace: {{ .Release.Namespace }}
+spec:
+  metrics:
+  - name: update-config-to-live
+    count: 1
+    interval: 5s
+    successCondition: "true"
+    provider:
+      job:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: update-config
+                image: bitnami/kubectl:latest
+                command: ["/bin/sh"]
+                args: ["-c", "kubectl patch configmap {{ .Values.app.name }}-config -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live'"]
+              restartPolicy: Never
+              serviceAccountName: argo-rollouts
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: promote-live-analysis
+  namespace: {{ .Release.Namespace }}
+spec:
+  metrics:
+  - name: promote-live
+    count: 1
+    interval: 5s
+    successCondition: "true"
+    provider:
+      job:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: promote-live
+                image: bitnami/kubectl:latest
+                command: ["/bin/sh"]
+                args: ["-c", "echo 'Step 3: promote_live - Canary promoted to live, old pods deleted'"]
+              restartPolicy: Never
 ---
 apiVersion: v1
 kind: Service
