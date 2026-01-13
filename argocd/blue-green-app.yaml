@@ -14,8 +14,6 @@ spec:
     helm:
       valueFiles:
       - values.yaml
-    directory:
-      include: "rollout-template.yaml"
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
     namespace: default
