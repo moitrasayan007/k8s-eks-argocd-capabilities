@@ -25,6 +25,7 @@ spec:
         image: nginx:1.20
         ports:
         - containerPort: 80
+          protocol: TCP
         resources:
           requests:
             memory: "64Mi"
