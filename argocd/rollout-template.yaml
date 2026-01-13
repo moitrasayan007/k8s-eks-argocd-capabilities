@@ -1,0 +1,64 @@
+{{- if .Values.deployment.setProductionState }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.app.image }}
+          ports:
+            - containerPort: {{ .Values.services.port }}
+          env:
+            - name: PRODUCTION_STATE
+              value: "test"
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu | quote }}
+              memory: {{ .Values.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu | quote }}
+              memory: {{ .Values.resources.limits.memory | quote }}
+  strategy:
+    blueGreen:
+      activeService: {{ .Values.services.active }}
+      previewService: {{ .Values.services.preview }}
+      autoPromotionEnabled: {{ .Values.rollout.autoPromotionEnabled }}
+      scaleDownDelaySeconds: {{ .Values.rollout.scaleDownDelaySeconds }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.active }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Values.app.name }}
+  ports:
+    - port: {{ .Values.services.port }}
+      targetPort: {{ .Values.services.port }}
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.preview }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Values.app.name }}
+  ports:
+    - port: {{ .Values.services.port }}
+      targetPort: {{ .Values.services.port }}
+  type: ClusterIP
+{{- end }}

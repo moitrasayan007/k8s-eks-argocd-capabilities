@@ -11,8 +11,11 @@ spec:
     repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
     path: argocd
     targetRevision: master
+    helm:
+      valueFiles:
+      - values.yaml
     directory:
-      include: "blue-green-rollout.yaml"
+      include: "rollout-template.yaml"
   destination:
     server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
     namespace: default
