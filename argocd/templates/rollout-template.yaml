@@ -29,6 +29,30 @@ spec:
                 command: ["/bin/sh"]
                 args: ["-c", "sleep 5 && kubectl patch configmap {{ .Values.app.name }}-config -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live' && sleep 5"]
               restartPolicy: Never
+              serviceAccountName: argo-rollouts
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: auto-promote-analysis
+  namespace: {{ .Release.Namespace }}
+spec:
+  metrics:
+  - name: auto-promote
+    count: 1
+    interval: 5s
+    successCondition: "true"
+    provider:
+      job:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: auto-promote
+                image: alpine:latest
+                command: ["/bin/sh"]
+                args: ["-c", "echo 'Step 3: promote_live completed'"]
+              restartPolicy: Never
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -66,11 +90,14 @@ spec:
     blueGreen:
       activeService: {{ .Values.services.active }}
       previewService: {{ .Values.services.preview }}
-      autoPromotionEnabled: true
+      autoPromotionEnabled: false
       scaleDownDelaySeconds: 30
       prePromotionAnalysis:
         templates:
         - templateName: promote-canary-analysis
+      postPromotionAnalysis:
+        templates:
+        - templateName: auto-promote-analysis
 
 ---
 apiVersion: v1
