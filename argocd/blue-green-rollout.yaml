@@ -11,18 +11,7 @@ spec:
       previewService: blue-green-preview
       autoPromotionEnabled: false
       scaleDownDelaySeconds: 30
-      prePromotionAnalysis:
-        templates:
-        - templateName: success-rate
-        args:
-        - name: service-name
-          value: blue-green-preview
-      postPromotionAnalysis:
-        templates:
-        - templateName: success-rate
-        args:
-        - name: service-name
-          value: blue-green-active
+
   selector:
     matchLabels:
       app: blue-green-app
@@ -69,27 +58,3 @@ spec:
   - port: 80
     targetPort: 80
   type: ClusterIP
----
-apiVersion: argoproj.io/v1alpha1
-kind: AnalysisTemplate
-metadata:
-  name: success-rate
-  namespace: default
-spec:
-  args:
-  - name: service-name
-  metrics:
-  - name: success-rate
-    interval: 10s
-    count: 3
-    successCondition: result[0] >= 0.95
-    provider:
-      prometheus:
-        address: http://prometheus.monitoring.svc.cluster.local:9090
-        query: |
-          sum(irate(
-            http_requests_total{job="{{args.service-name}}",code!~"5.."}[5m]
-          )) / 
-          sum(irate(
-            http_requests_total{job="{{args.service-name}}"}[5m]
-          ))
