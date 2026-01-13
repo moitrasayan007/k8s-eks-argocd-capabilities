@@ -73,7 +73,7 @@ spec:
               - name: update-config
                 image: bitnami/kubectl:latest
                 command: ["/bin/sh"]
-                args: ["-c", "sleep 5 && kubectl patch configmap {{args.config-name}} -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live' && sleep 5"]
+                args: ["-c", "sleep 5 && kubectl patch configmap {{.args.config-name}} -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live' && sleep 5"]
               restartPolicy: Never
               serviceAccountName: argo-rollouts
 
