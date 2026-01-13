@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blue-green-deployment
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/moitrasayan007/k8s-eks-argocd-capabilities
+    path: argocd
+    targetRevision: master
+    directory:
+      include: "blue-green-rollout.yaml"
+  destination:
+    server: arn:aws:eks:us-west-1:501294308535:cluster/prod-eks
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
