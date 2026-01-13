@@ -48,7 +48,7 @@ spec:
         templates:
         - templateName: promote-canary-analysis
         args:
-        - name: config-name
+        - name: configname
           value: {{ .Values.app.name }}-config
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -58,7 +58,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   args:
-  - name: config-name
+  - name: configname
   metrics:
   - name: update-config-to-live
     count: 1
@@ -73,7 +73,7 @@ spec:
               - name: update-config
                 image: bitnami/kubectl:latest
                 command: ["/bin/sh"]
-                args: ["-c", "sleep 5 && kubectl patch configmap {{.args.config-name}} -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live' && sleep 5"]
+                args: ["-c", "sleep 5 && kubectl patch configmap {{.args.configname}} -p '{\"data\":{\"PRODUCTION_STATE\":\"live\"}}' -n {{ .Release.Namespace }} && echo 'Step 2: promote_canary - Updated PRODUCTION_STATE=live' && sleep 5"]
               restartPolicy: Never
               serviceAccountName: argo-rollouts
 
